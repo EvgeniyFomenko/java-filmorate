@@ -9,12 +9,14 @@ import ru.yandex.practicum.filmorate.storage.UserStorage;
 import java.time.LocalDate;
 import java.util.HashMap;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class UserServiceTest {
     UserService userService;
+
     @BeforeEach
-    void setUp(){
+    void setUp() {
         userService = new UserService(new UserStorage(new HashMap<>()));
     }
 
@@ -23,20 +25,20 @@ class UserServiceTest {
         User user = new User();
         user.setEmail("");
         user.setLogin("login1");
-        user.setBirthday(LocalDate.of(1994, 6,12));
+        user.setBirthday(LocalDate.of(1994, 6, 12));
 
-        assertThrows(UserValidateException.class,()->userService.addUser(user)) ;
+        assertThrows(UserValidateException.class, () -> userService.addUser(user));
         user.setEmail("myemail");
-        assertThrows(UserValidateException.class,()->userService.addUser(user)) ;
+        assertThrows(UserValidateException.class, () -> userService.addUser(user));
         user.setEmail("my@email.ru");
         user.setLogin("");
-        assertThrows(UserValidateException.class,()->userService.addUser(user)) ;
+        assertThrows(UserValidateException.class, () -> userService.addUser(user));
         user.setLogin("vasya pupkin");
-        assertThrows(UserValidateException.class,()->userService.addUser(user)) ;
+        assertThrows(UserValidateException.class, () -> userService.addUser(user));
         user.setLogin("vasyaPupkin");
         userService.addUser(user);
-        assertEquals(user.getLogin(),user.getName());
-        user.setBirthday(LocalDate.of(2024,2,23));
-        assertThrows(UserValidateException.class,()->userService.addUser(user));
+        assertEquals(user.getLogin(), user.getName());
+        user.setBirthday(LocalDate.of(2024, 2, 23));
+        assertThrows(UserValidateException.class, () -> userService.addUser(user));
     }
 }
