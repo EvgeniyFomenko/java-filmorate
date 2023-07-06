@@ -29,7 +29,7 @@ public class FilmService {
         try {
             validateFilm(film);
             return filmStorage.saveNewFilm(film);
-        }catch(FilmValidateException ex){
+        } catch (FilmValidateException ex) {
             log.warn(ex.getMessage());
             throw new FilmValidateException(ex.getMessage());
         }
@@ -37,11 +37,11 @@ public class FilmService {
 
     @PutMapping
     public Film updateFilm(@RequestBody Film film) throws FilmNotFoundException {
-        if(filmStorage.isExist(film.getId())) {
+        if (filmStorage.isExist(film.getId())) {
             filmStorage.updateFilm(film);
-        }else {
-            log.warn("фильм с таким id не найден {}",film.getId());
-            throw new FilmNotFoundException("фильм с таким id не найден "+film.getId());
+        } else {
+            log.warn("фильм с таким id не найден {}", film.getId());
+            throw new FilmNotFoundException("фильм с таким id не найден " + film.getId());
         }
         return film;
     }

@@ -17,7 +17,7 @@ public class UserStorage {
     public User saveUser(User user) {
         id++;
         user.setId(id);
-        userList.put(id,user);
+        userList.put(id, user);
         return user;
     }
 
@@ -26,6 +26,6 @@ public class UserStorage {
     }
 
     public void updateUser(User user) {
-       userList.put(user.getId(),user);
+        userList.put(user.getId(), user);
     }
 }

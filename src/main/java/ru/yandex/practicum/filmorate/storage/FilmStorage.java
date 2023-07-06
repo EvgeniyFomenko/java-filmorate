@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import java.util.Map;
+
 @Data
 @RequiredArgsConstructor
 @Repository
@@ -17,7 +18,7 @@ public class FilmStorage {
     public Film saveNewFilm(Film film) {
         id++;
         film.setId(id);
-        filmList.put(id,film);
+        filmList.put(id, film);
         return film;
     }
 
@@ -26,6 +27,6 @@ public class FilmStorage {
     }
 
     public void updateFilm(Film film) {
-        filmList.put(film.getId(),film);
+        filmList.put(film.getId(), film);
     }
 }
