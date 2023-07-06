@@ -24,7 +24,7 @@ public class UserController {
     }
 
     @PutMapping
-    public User updateUser(@RequestBody User user) throws UserNotFoundException{
+    public User updateUser(@RequestBody User user) throws UserNotFoundException {
         userService.updateUser(user);
         return user;
     }
