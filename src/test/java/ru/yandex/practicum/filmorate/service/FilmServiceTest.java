@@ -2,7 +2,7 @@ package ru.yandex.practicum.filmorate.service;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ru.yandex.practicum.filmorate.exception.FilmValidateException;
+import ru.yandex.practicum.filmorate.exception.ValidateException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
 
@@ -26,17 +26,17 @@ class FilmServiceTest {
         film.setDuration(60);
         film.setReleaseDate(LocalDate.of(2022, 02, 23));
 
-        assertThrows(FilmValidateException.class, () -> filmService.addFilm(film));
+        assertThrows(ValidateException.class, () -> filmService.addModel(film));
         film.setName(" ");
-        assertThrows(FilmValidateException.class, () -> filmService.addFilm(film));
+        assertThrows(ValidateException.class, () -> filmService.addModel(film));
         film.setDescription(" wqeqwrwefsdgsdevygfghdfgsdrthdfhdfgsgsdgdsgdgfdfgdfggggggfdffhljhjlhkjlhiuhiulhjlknjhkjdsafjdfasofuawejflkasjfls;jfiasojfeiajs;fe;kasjdfksjfdiosjfisjfsidhgdfgskdjfksdjfjsif fjs kfj sdkfjas;lfd ;sjfkas");
         film.setName("film1");
-        assertThrows(FilmValidateException.class, () -> filmService.addFilm(film));
+        assertThrows(ValidateException.class, () -> filmService.addModel(film));
         film.setDescription("description");
         film.setReleaseDate(LocalDate.of(1895, 12, 25));
-        assertThrows(FilmValidateException.class, () -> filmService.addFilm(film));
+        assertThrows(ValidateException.class, () -> filmService.addModel(film));
         film.setReleaseDate(LocalDate.of(2022, 02, 23));
         film.setDuration(-1);
-        assertThrows(FilmValidateException.class, () -> filmService.addFilm(film));
+        assertThrows(ValidateException.class, () -> filmService.addModel(film));
     }
 }

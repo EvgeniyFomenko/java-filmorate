@@ -1,38 +1,30 @@
 package ru.yandex.practicum.filmorate.controller;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.exception.FilmNotFoundException;
-import ru.yandex.practicum.filmorate.exception.FilmValidateException;
+import ru.yandex.practicum.filmorate.exception.NotFoundException;
+import ru.yandex.practicum.filmorate.exception.ValidateException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.FilmService;
 
-import java.util.List;
+import javax.validation.Valid;
 
 @Slf4j
 @RestController
 @RequestMapping("/films")
-@RequiredArgsConstructor
-public class FilmController {
+public class FilmController extends Controller {
 
-    private final FilmService filmService;
+    public FilmController(FilmService service) {
+        super(service);
+    }
 
     @PostMapping
-    public Film addFilm(@RequestBody Film film) throws FilmValidateException {
-        filmService.addFilm(film);
-        return film;
+    public Film add(@RequestBody @Valid Film model) throws ValidateException {
+        return (Film) super.add(model);
     }
 
     @PutMapping
-    public Film updateFilm(@RequestBody Film film) throws FilmNotFoundException {
-        filmService.updateFilm(film);
-        return film;
+    public Film update(@RequestBody @Valid Film model) throws NotFoundException {
+        return (Film) super.update(model);
     }
-
-    @GetMapping
-    public List<Film> getFilmList() {
-        return filmService.getFilmList();
-    }
-
 }

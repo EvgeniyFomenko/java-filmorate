@@ -1,37 +1,30 @@
 package ru.yandex.practicum.filmorate.controller;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.exception.UserNotFoundException;
-import ru.yandex.practicum.filmorate.exception.UserValidateException;
+import ru.yandex.practicum.filmorate.exception.NotFoundException;
+import ru.yandex.practicum.filmorate.exception.ValidateException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.UserService;
 
-import java.util.List;
+import javax.validation.Valid;
 
 @Slf4j
 @RestController
 @RequestMapping("/users")
-@RequiredArgsConstructor
-public class UserController {
+public class UserController extends Controller {
 
-    private final UserService userService;
+    public UserController(UserService service) {
+        super(service);
+    }
 
     @PostMapping
-    public User addUser(@RequestBody User user) throws UserValidateException {
-        return userService.addUser(user);
+    public User add(@RequestBody @Valid User model) throws ValidateException {
+        return (User) super.add(model);
     }
 
     @PutMapping
-    public User updateUser(@RequestBody User user) throws UserNotFoundException {
-        userService.updateUser(user);
-        return user;
+    public User update(@RequestBody @Valid User model) throws NotFoundException {
+        return (User) super.update(model);
     }
-
-    @GetMapping
-    public List<User> getUserList() {
-        return userService.getUserList();
-    }
-
 }

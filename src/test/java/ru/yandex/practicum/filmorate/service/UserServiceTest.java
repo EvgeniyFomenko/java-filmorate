@@ -2,7 +2,7 @@ package ru.yandex.practicum.filmorate.service;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ru.yandex.practicum.filmorate.exception.UserValidateException;
+import ru.yandex.practicum.filmorate.exception.ValidateException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
 
@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class UserServiceTest {
-    UserService userService;
+    Service userService;
 
     @BeforeEach
     void setUp() {
@@ -21,24 +21,19 @@ class UserServiceTest {
     }
 
     @Test
-    void addUser() throws UserValidateException {
+    void addUser() throws ValidateException {
         User user = new User();
         user.setEmail("");
         user.setLogin("login1");
         user.setBirthday(LocalDate.of(1994, 6, 12));
 
-        assertThrows(UserValidateException.class, () -> userService.addUser(user));
-        user.setEmail("myemail");
-        assertThrows(UserValidateException.class, () -> userService.addUser(user));
         user.setEmail("my@email.ru");
-        user.setLogin("");
-        assertThrows(UserValidateException.class, () -> userService.addUser(user));
         user.setLogin("vasya pupkin");
-        assertThrows(UserValidateException.class, () -> userService.addUser(user));
+        assertThrows(ValidateException.class, () -> userService.addModel(user));
         user.setLogin("vasyaPupkin");
-        userService.addUser(user);
+        userService.addModel(user);
         assertEquals(user.getLogin(), user.getName());
         user.setBirthday(LocalDate.of(2024, 2, 23));
-        assertThrows(UserValidateException.class, () -> userService.addUser(user));
+        assertThrows(ValidateException.class, () -> userService.addModel(user));
     }
 }
