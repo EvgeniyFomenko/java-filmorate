@@ -12,10 +12,10 @@ import java.util.List;
 
 @RestController
 public class FilmLikeController extends FilmController {
-    private final static String SERVICE = "ManageLikeFilmService";
+    private final static String USE_SERVICE = "ManageLikeFilmService";
     private final ManageLikeFilmService manageLikeFilmService;
 
-    public FilmLikeController(@Qualifier(SERVICE) Service filmService) {
+    public FilmLikeController(@Qualifier(USE_SERVICE) Service filmService) {
         super(filmService);
         manageLikeFilmService = (ManageLikeFilmService) filmService;
     }
