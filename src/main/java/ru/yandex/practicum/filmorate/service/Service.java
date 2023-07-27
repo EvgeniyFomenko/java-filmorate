@@ -13,6 +13,7 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 public abstract class Service {
+    public static final String FILM_NOT_FOUND_ID_EXCEPTION = "фильм с таким id не найден";
 
     private final Storage storage;
 
@@ -30,8 +31,8 @@ public abstract class Service {
         if (storage.isExist(model.getId())) {
             storage.update(model);
         } else {
-            log.warn("фильм с таким id не найден {}", model.getId());
-            throw new NotFoundException("фильм с таким id не найден " + model.getId());
+            log.warn(FILM_NOT_FOUND_ID_EXCEPTION + model.getId());
+            throw new NotFoundException(FILM_NOT_FOUND_ID_EXCEPTION + model.getId());
         }
         return model;
     }
@@ -41,6 +42,10 @@ public abstract class Service {
     }
 
     protected abstract <T extends Model> void validate(T model) throws ValidateException;
+
+    public <T extends Model> T getModelById(int id) {
+        return storage.get(id);
+    }
 
 
 }

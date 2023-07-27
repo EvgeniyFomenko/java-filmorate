@@ -4,7 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.filmorate.exception.ValidateException;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.storage.FilmStorage;
+import ru.yandex.practicum.filmorate.storage.InMemoryFilmStorage;
 
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -16,7 +16,7 @@ class FilmServiceTest {
 
     @BeforeEach
     void setUp() {
-        filmService = new FilmService(new FilmStorage(new HashMap<>()));
+        filmService = new FilmService(new InMemoryFilmStorage(new HashMap<>()));
     }
 
     @Test

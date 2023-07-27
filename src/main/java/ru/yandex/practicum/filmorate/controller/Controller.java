@@ -10,7 +10,7 @@ import ru.yandex.practicum.filmorate.service.Service;
 import java.util.List;
 
 @RequiredArgsConstructor
-public abstract class Controller<E extends Service> {
+public abstract class Controller {
 
     private final Service service;
 
@@ -27,7 +27,16 @@ public abstract class Controller<E extends Service> {
     }
 
     @GetMapping
-    public <T extends Model> List<? super Model> getModelList() {
+    public List<? super Model> getModelList() {
         return service.getModelList();
+    }
+
+    public <T extends Model> T get(int id) throws NotFoundException {
+        T model = service.getModelById(id);
+        if (model == null) {
+            throw new NotFoundException("Пользователь с id " + id + " не найден");
+        }
+
+        return model;
     }
 }
