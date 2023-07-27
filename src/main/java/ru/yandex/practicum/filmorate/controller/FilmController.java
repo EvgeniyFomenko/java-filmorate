@@ -12,7 +12,6 @@ import javax.validation.Valid;
 @Slf4j
 @RequestMapping("/films")
 public class FilmController extends Controller {
-    private final static String USE_SERVICE = "FilmService";
 
     public FilmController(Service filmService) {
         super(filmService);
