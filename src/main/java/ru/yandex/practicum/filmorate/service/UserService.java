@@ -12,9 +12,9 @@ import java.util.Objects;
 
 @Service("UserService")
 public class UserService extends ru.yandex.practicum.filmorate.service.Service {
-    protected final static String USER_STORAGE = "inMemoryUserStorage";
-    protected final static String USER_LOGIN_EXCEPTION = "Логин пользователя не может содержать пробелы";
-    protected final static String USER_BIRTH_DATE_EXCEPTION = "Дата рождения не может быть в будущем";
+    protected static final String USER_STORAGE = "inMemoryUserStorage";
+    protected static final String USER_LOGIN_EXCEPTION = "Логин пользователя не может содержать пробелы";
+    protected static final String USER_BIRTH_DATE_EXCEPTION = "Дата рождения не может быть в будущем";
 
     public UserService(@Qualifier(USER_STORAGE) Storage storage) {
         super(storage);

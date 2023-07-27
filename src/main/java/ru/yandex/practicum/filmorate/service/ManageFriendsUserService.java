@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 @Service("ManageFriendsUserService")
 public class ManageFriendsUserService extends UserService {
-    protected final static String NEGATIVE_ID_EXCEPTION = "Id пользователя не может быть меньше нуля";
+    protected static final String NEGATIVE_ID_EXCEPTION = "Id пользователя не может быть меньше нуля";
 
     public ManageFriendsUserService(@Qualifier(UserService.USER_STORAGE) Storage storage) {
         super(storage);

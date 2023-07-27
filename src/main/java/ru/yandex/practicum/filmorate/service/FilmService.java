@@ -13,11 +13,11 @@ import java.util.Objects;
 @Service
 public class FilmService extends ru.yandex.practicum.filmorate.service.Service {
 
-    protected final static String FILM_STORAGE = "inMemoryFilmStorage";
-    protected final static String FILM_NAME_BLANK_EXCEPTION = "Не заполнено название фильма";
-    protected final static String FILM_DESCRIPTION_EXCEPTION = "Длинна описания привышает 200 символов";
-    protected final static String FILM_DATE_PRODUCE_EXCEPTION = "Дата выпуска не может быть раньше появления самого кино";
-    protected final static String FILM_DURATION_EXCEPTION = "Продолжительность не может быть меньше или ровна 0";
+    protected static final String FILM_STORAGE = "inMemoryFilmStorage";
+    protected static final String FILM_NAME_BLANK_EXCEPTION = "Не заполнено название фильма";
+    protected static final String FILM_DESCRIPTION_EXCEPTION = "Длинна описания привышает 200 символов";
+    protected static final String FILM_DATE_PRODUCE_EXCEPTION = "Дата выпуска не может быть раньше появления самого кино";
+    protected static final String FILM_DURATION_EXCEPTION = "Продолжительность не может быть меньше или ровна 0";
 
 
     public FilmService(@Qualifier(FILM_STORAGE) Storage storage) {

@@ -13,7 +13,7 @@ import java.util.List;
 @RestController
 public class UserLikeController extends UserController {
 
-    private final static String SERVICE = "ManageFriendsUserService";
+    private static final String SERVICE = "ManageFriendsUserService";
     private final ManageFriendsUserService manageFriendsUserService;
 
     public UserLikeController(@Qualifier(SERVICE) Service filmService) {

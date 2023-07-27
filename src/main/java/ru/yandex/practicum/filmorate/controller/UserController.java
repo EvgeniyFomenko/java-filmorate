@@ -14,7 +14,7 @@ import javax.validation.Valid;
 @RequestMapping("/users")
 public class UserController extends Controller {
 
-    private final static String SERVICE = "UserService";
+    private static final String SERVICE = "UserService";
 
     public UserController(@Qualifier(SERVICE) Service service) {
         super(service);
