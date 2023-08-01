@@ -3,12 +3,13 @@ package ru.yandex.practicum.filmorate.service;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
-import ru.yandex.practicum.filmorate.model.FriendsUser;
-import ru.yandex.practicum.filmorate.model.Model;
+import ru.yandex.practicum.filmorate.model.FriendsTo;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.Storage;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 
@@ -20,35 +21,21 @@ public class ManageFriendsUserService extends UserService {
         super(storage);
     }
 
-    public void addToFriends(FriendsUser user) throws NotFoundException {
-        if (user.getIdFrom() < 1 || user.getIdTo() < 1) {
+    public void addToFriends(FriendsTo users) throws NotFoundException {
+        if (users.getFrom() < 1 || users.getTo() < 1) {
             throw new NotFoundException(NEGATIVE_ID_EXCEPTION);
         }
-        User user1 = super.getModelById(user.getIdFrom());
-        User user2 = super.getModelById(user.getIdTo());
-        Set<Integer> userFr1 = user1.getFriendsList();
-        userFr1.add(user2.getId());
-        user1.setFriendsList(userFr1);
-        Set<Integer> userFr2 = user2.getFriendsList();
-        userFr2.add(user1.getId());
-        user1.setFriendsList(userFr1);
+        storage.addToSet(users);
     }
 
-    public void removeFriends(FriendsUser user) {
-        User user1 = super.getModelById(user.getIdFrom());
-        User user2 = super.getModelById(user.getIdTo());
-        Set<Integer> userFr1 = user1.getFriendsList();
-        userFr1.remove(user2.getId());
-        user1.setFriendsList(userFr1);
-        Set<Integer> userFr2 = user2.getFriendsList();
-        userFr2.remove(user1.getId());
-        user1.setFriendsList(userFr1);
+    public void removeFriends(FriendsTo user) {
+        storage.removeIdFromIdSet(user);
     }
 
-    public List<User> getCommonFriends(FriendsUser user) {
-        User user1 = super.getModelById(user.getIdFrom());
-        User user2 = super.getModelById(user.getIdTo());
-        List<Integer> idFriends = user1.getFriendsList().stream().filter(e -> user2.getFriendsList().stream()
+    public List<User> getCommonFriends(FriendsTo user) {
+        User user1 = super.getModelById(user.getFrom());
+        User user2 = super.getModelById(user.getTo());
+        List<Integer> idFriends = user1.getIdSet().stream().filter(e -> user2.getIdSet().stream()
                 .anyMatch(e1 -> Objects.equals(e, e1))).collect(Collectors.toList());
         return idFriends.stream().map(super::getModelById).collect(Collectors.toList()).stream().map(e -> (User) e)
                 .collect(Collectors.toList());
@@ -56,17 +43,12 @@ public class ManageFriendsUserService extends UserService {
 
     public List<User> getFriends(int id) {
         User user = super.getModelById(id);
-        Collection<? super Model> filmList = super.getModelList();
-        List<User> lObj = new ArrayList<>();
+        List<User> userList = new ArrayList<>();
 
-        for (Object fm :
-                filmList) {
-            lObj.add((User) fm);
+        for (int idUser : user.getIdSet()) {
+            userList.add(super.getModelById(idUser));
         }
 
-        List<User> usersList = lObj.stream().filter(e -> user.getFriendsList().contains(e.getId()))
-                .collect(Collectors.toList());
-
-        return usersList;
+        return userList;
     }
 }

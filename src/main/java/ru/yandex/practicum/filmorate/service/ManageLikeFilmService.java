@@ -22,18 +22,13 @@ public class ManageLikeFilmService extends FilmService {
     }
 
     public Film addLike(FilmLikes filmLikes) {
-        Film film = super.getModelById(filmLikes.getIdFilm());
-        Set<Integer> likes = film.getLikes();
-
-        likes.add(filmLikes.getIdUser());
-
-        return film;
+        return storage.addToSet(filmLikes);
     }
 
     public Film deleteLike(FilmLikes filmLikes) throws NotFoundException {
-        Film film = super.getModelById(filmLikes.getIdFilm());
-        Set<Integer> likes = film.getLikes();
-        int userId = filmLikes.getIdUser();
+        Film film = super.getModelById(filmLikes.getFrom());
+        Set<Integer> likes = film.getIdSet();
+        int userId = filmLikes.getTo();
         if (userId < 1) {
             throw new NotFoundException(ManageFriendsUserService.NEGATIVE_ID_EXCEPTION);
         }
@@ -44,20 +39,20 @@ public class ManageLikeFilmService extends FilmService {
 
     public Set<Integer> getLikes(Integer idFilm) {
         Film film = super.getModelById(idFilm);
-        Set<Integer> likes = film.getLikes();
+        Set<Integer> likes = film.getIdSet();
 
         return likes;
     }
 
     public List<Film> getFilmsPopular(int count) {
-        Collection<? super Model> filmList = super.getModelList();
-        List<Film> lObj = new ArrayList<>();
+        Collection<? super Model> collection = super.getModelList();
+        List<Film> filmList = new ArrayList<>();
         for (Object fm :
-                filmList) {
-            lObj.add((Film) fm);
+                collection) {
+            filmList.add((Film) fm);
         }
 
-        return lObj.stream().sorted((e1, e2) -> e2.getLikes().size() - e1.getLikes().size())
+        return filmList.stream().sorted((e1, e2) -> e2.getIdSet().size() - e1.getIdSet().size())
                 .limit(count).collect(Collectors.toList());
     }
 }

@@ -15,12 +15,12 @@ import java.util.List;
 public abstract class Service {
     public static final String FILM_NOT_FOUND_ID_EXCEPTION = "фильм с таким id не найден";
 
-    private final Storage storage;
+    protected final Storage storage;
 
     public <T extends Model> T addModel(T model) throws ValidateException {
         try {
             validate(model);
-            return storage.save(model);
+            return (T) storage.save(model);
         } catch (ValidateException ex) {
             log.warn(ex.getMessage());
             throw new ValidateException(ex.getMessage());

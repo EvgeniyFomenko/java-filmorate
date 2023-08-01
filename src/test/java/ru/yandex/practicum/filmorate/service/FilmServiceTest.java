@@ -12,7 +12,7 @@ import java.util.HashMap;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class FilmServiceTest {
-    FilmService filmService;
+    private FilmService filmService;
 
     @BeforeEach
     void setUp() {

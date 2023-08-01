@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class FilmControllerTest {
-    FilmController filmController;
+    private FilmController filmController;
 
     @BeforeEach
     void setUp() {

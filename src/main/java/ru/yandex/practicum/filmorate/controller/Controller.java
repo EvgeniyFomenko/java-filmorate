@@ -34,7 +34,7 @@ public abstract class Controller {
     public <T extends Model> T get(int id) throws NotFoundException {
         T model = service.getModelById(id);
         if (model == null) {
-            throw new NotFoundException("Пользователь с id " + id + " не найден");
+            throw new NotFoundException("Сущность с id " + id + " не найдена");
         }
 
         return model;

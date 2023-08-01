@@ -7,8 +7,6 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
 
 @Data
 public class User extends Model {
@@ -22,5 +20,5 @@ public class User extends Model {
     @NotEmpty
     private String login;
     private LocalDate birthday;
-    private Set<Integer> friendsList = new HashSet<>();
+
 }

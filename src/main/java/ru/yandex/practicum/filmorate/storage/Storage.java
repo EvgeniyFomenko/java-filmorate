@@ -1,20 +1,27 @@
 package ru.yandex.practicum.filmorate.storage;
 
+import ru.yandex.practicum.filmorate.model.FromTo;
 import ru.yandex.practicum.filmorate.model.Model;
 
 import java.util.Map;
 
 public interface Storage {
 
-    public boolean isExist(int id);
+    boolean isExist(int id);
 
-    public <T extends Model> void update(T model);
+    void update(Model model);
 
-    public <T extends Model> T save(T model);
+    Model save(Model model);
 
-    public <T extends Model> T get(int id);
+    <T extends Model> T get(int id);
 
-    public void delete(int id);
+    void delete(int id);
 
-    Map<Integer, ? super Model> getModelMap();
+    Map<Integer, ?> getModelMap();
+
+    void removeIdFromIdSet(FromTo user);
+
+    public <T extends Model> T addToSet(FromTo filmLikes);
+
+
 }
