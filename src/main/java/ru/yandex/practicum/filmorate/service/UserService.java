@@ -1,18 +1,22 @@
 package ru.yandex.practicum.filmorate.service;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.ValidateException;
 import ru.yandex.practicum.filmorate.model.Model;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.storage.UserStorage;
+import ru.yandex.practicum.filmorate.storage.Storage;
 
 import java.time.LocalDate;
 import java.util.Objects;
 
-@Service
+@Service("UserService")
 public class UserService extends ru.yandex.practicum.filmorate.service.Service {
+    protected static final String USER_STORAGE = "inMemoryUserStorage";
+    protected static final String USER_LOGIN_EXCEPTION = "Логин пользователя не может содержать пробелы";
+    protected static final String USER_BIRTH_DATE_EXCEPTION = "Дата рождения не может быть в будущем";
 
-    public UserService(UserStorage storage) {
+    public UserService(@Qualifier(USER_STORAGE) Storage storage) {
         super(storage);
     }
 
@@ -21,7 +25,7 @@ public class UserService extends ru.yandex.practicum.filmorate.service.Service {
         User user = (User) model;
 
         if (user.getLogin().contains(" ")) {
-            throw new ValidateException("Логин пользователя не может содержать пробелы");
+            throw new ValidateException(USER_LOGIN_EXCEPTION);
         }
 
         if (Objects.isNull(user.getName()) || user.getName().isEmpty() || user.getName().isBlank()) {
@@ -29,7 +33,7 @@ public class UserService extends ru.yandex.practicum.filmorate.service.Service {
         }
 
         if (user.getBirthday().isAfter(LocalDate.now())) {
-            throw new ValidateException("Дата рождения не может быть в будущем");
+            throw new ValidateException(USER_BIRTH_DATE_EXCEPTION);
         }
 
     }

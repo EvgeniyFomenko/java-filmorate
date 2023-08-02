@@ -1,28 +1,27 @@
 package ru.yandex.practicum.filmorate.storage;
 
-import lombok.Data;
+import ru.yandex.practicum.filmorate.model.FromTo;
 import ru.yandex.practicum.filmorate.model.Model;
 
 import java.util.Map;
 
-@Data
-public abstract class Storage {
+public interface Storage {
 
-    protected final Map<Integer, ? super Model> modelMap;
-    private Integer id = 0;
+    boolean isExist(int id);
 
-    public boolean isExist(int id) {
-        return modelMap.containsKey(id);
-    }
+    void update(Model model);
 
-    public <T extends Model> void update(T model) {
-        modelMap.put(model.getId(), model);
-    }
+    Model save(Model model);
 
-    public <T extends Model> T save(T model) {
-        id++;
-        model.setId(id);
-        modelMap.put(id, model);
-        return model;
-    }
+    <T extends Model> T get(int id);
+
+    void delete(int id);
+
+    Map<Integer, ?> getModelMap();
+
+    void removeIdFromIdSet(FromTo user);
+
+    public <T extends Model> T addToSet(FromTo filmLikes);
+
+
 }

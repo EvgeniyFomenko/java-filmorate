@@ -5,8 +5,8 @@ import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidateException;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.service.UserService;
-import ru.yandex.practicum.filmorate.storage.UserStorage;
+import ru.yandex.practicum.filmorate.service.ManageFriendsUserService;
+import ru.yandex.practicum.filmorate.storage.InMemoryUserStorage;
 
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -14,11 +14,11 @@ import java.util.HashMap;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class UserControllerTest {
-    UserController userController;
+    private UserController userController;
 
     @BeforeEach
     void setUp() {
-        userController = new UserController(new UserService(new UserStorage(new HashMap<>())));
+        userController = new UserController(new ManageFriendsUserService(new InMemoryUserStorage(new HashMap<>())));
     }
 
     @Test

@@ -20,4 +20,5 @@ public class User extends Model {
     @NotEmpty
     private String login;
     private LocalDate birthday;
+
 }
