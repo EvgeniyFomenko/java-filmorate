@@ -20,5 +20,6 @@ public class User extends Model {
     @NotEmpty
     private String login;
     private LocalDate birthday;
+    private Boolean isApproveFriendAdd; //Approve and Don't Approve
 
 }
