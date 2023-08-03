@@ -1,5 +1,4 @@
 # java-filmorate
-
 Template repository for Filmorate project.
 
 ![Sheme data base for filmorate](db_filmorate.jpg)
