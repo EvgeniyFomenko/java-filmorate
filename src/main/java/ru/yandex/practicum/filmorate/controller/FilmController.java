@@ -13,8 +13,9 @@ import javax.validation.Valid;
 @RequestMapping("/films")
 public class FilmController extends Controller {
 
-    public FilmController(Service filmService) {
-        super(filmService);
+
+    public FilmController(Service service) {
+        super(service);
     }
 
     @PostMapping
@@ -31,6 +32,5 @@ public class FilmController extends Controller {
     public Film get(@PathVariable int id) throws NotFoundException {
         return super.get(id);
     }
-
 
 }

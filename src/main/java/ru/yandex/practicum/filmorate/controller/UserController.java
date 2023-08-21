@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidateException;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.service.Service;
+import ru.yandex.practicum.filmorate.service.UserService;
 
 import javax.validation.Valid;
 
@@ -16,7 +16,7 @@ public class UserController extends Controller {
 
     private static final String SERVICE = "UserService";
 
-    public UserController(@Qualifier(SERVICE) Service service) {
+    public UserController(@Qualifier(SERVICE) UserService service) {
         super(service);
     }
 

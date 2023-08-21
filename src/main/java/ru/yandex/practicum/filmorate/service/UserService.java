@@ -5,18 +5,18 @@ import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.ValidateException;
 import ru.yandex.practicum.filmorate.model.Model;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.storage.Storage;
+import ru.yandex.practicum.filmorate.storage.StorageUser;
 
 import java.time.LocalDate;
 import java.util.Objects;
 
 @Service("UserService")
-public class UserService extends ru.yandex.practicum.filmorate.service.Service {
-    protected static final String USER_STORAGE = "inMemoryUserStorage";
+public class UserService extends ServiceUser {
+    protected static final String USER_STORAGE = "userDBStorage";
     protected static final String USER_LOGIN_EXCEPTION = "Логин пользователя не может содержать пробелы";
     protected static final String USER_BIRTH_DATE_EXCEPTION = "Дата рождения не может быть в будущем";
 
-    public UserService(@Qualifier(USER_STORAGE) Storage storage) {
+    public UserService(@Qualifier(USER_STORAGE) StorageUser storage) {
         super(storage);
     }
 

@@ -12,12 +12,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public abstract class Controller {
 
-    private final Service service;
+    protected final Service service;
 
 
     public <T extends Model> T add(T model) throws ValidateException {
-        service.addModel(model);
-        return model;
+
+        return service.addModel(model);
     }
 
 
@@ -33,9 +33,6 @@ public abstract class Controller {
 
     public <T extends Model> T get(int id) throws NotFoundException {
         T model = service.getModelById(id);
-        if (model == null) {
-            throw new NotFoundException("Сущность с id " + id + " не найдена");
-        }
 
         return model;
     }

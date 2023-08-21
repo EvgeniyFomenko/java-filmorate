@@ -1,12 +1,14 @@
 package ru.yandex.practicum.filmorate.service;
 
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.FilmLikes;
 import ru.yandex.practicum.filmorate.model.Model;
-import ru.yandex.practicum.filmorate.storage.Storage;
+import ru.yandex.practicum.filmorate.storage.StorageFilm;
+import ru.yandex.practicum.filmorate.storage.StorageUser;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -16,9 +18,12 @@ import java.util.stream.Collectors;
 
 @Service("ManageLikeFilmService")
 public class ManageLikeFilmService extends FilmService {
+    private final StorageUser storageUser;
 
-    public ManageLikeFilmService(@Qualifier(FilmService.FILM_STORAGE) Storage storage) {
+    public ManageLikeFilmService(@Qualifier(FilmService.FILM_STORAGE) StorageFilm storage,
+                                 @Qualifier(UserService.USER_STORAGE) StorageUser storageUser) {
         super(storage);
+        this.storageUser = storageUser;
     }
 
     public Film addLike(FilmLikes filmLikes) {
@@ -26,20 +31,18 @@ public class ManageLikeFilmService extends FilmService {
     }
 
     public Film deleteLike(FilmLikes filmLikes) throws NotFoundException {
+        validateExistUser(filmLikes.getTo());
+
+        storage.removeIdFromIdSet(filmLikes);
+
         Film film = super.getModelById(filmLikes.getFrom());
-        Set<Integer> likes = film.getIdSet();
-        int userId = filmLikes.getTo();
-        if (userId < 1) {
-            throw new NotFoundException(ManageFriendsUserService.NEGATIVE_ID_EXCEPTION);
-        }
-        likes.remove(userId);
 
         return film;
     }
 
-    public Set<Integer> getLikes(Integer idFilm) {
+    public Set<Integer> getLikes(Integer idFilm) throws NotFoundException {
         Film film = super.getModelById(idFilm);
-        Set<Integer> likes = film.getIdSet();
+        Set<Integer> likes = film.getLikes();
 
         return likes;
     }
@@ -52,7 +55,16 @@ public class ManageLikeFilmService extends FilmService {
             filmList.add((Film) fm);
         }
 
-        return filmList.stream().sorted((e1, e2) -> e2.getIdSet().size() - e1.getIdSet().size())
+        return filmList.stream().sorted((e1, e2) -> e2.getLikes().size() - e1.getLikes().size())
                 .limit(count).collect(Collectors.toList());
+    }
+
+    private boolean validateExistUser(int userId) throws NotFoundException {
+        try {
+            storageUser.isExist(userId);
+        } catch (EmptyResultDataAccessException e) {
+            throw new NotFoundException(String.format(UserService.NOT_FOUND_ID_EXCEPTION, userId));
+        }
+        return true;
     }
 }

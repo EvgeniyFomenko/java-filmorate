@@ -21,7 +21,7 @@ public interface Storage {
 
     void removeIdFromIdSet(FromTo user);
 
-    public <T extends Model> T addToSet(FromTo filmLikes);
+    <T extends Model> T addToSet(FromTo filmLikes);
 
 
 }

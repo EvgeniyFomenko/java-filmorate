@@ -7,6 +7,7 @@ import ru.yandex.practicum.filmorate.exception.ValidateException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.ManageLikeFilmService;
 import ru.yandex.practicum.filmorate.storage.InMemoryFilmStorage;
+import ru.yandex.practicum.filmorate.storage.InMemoryUserStorage;
 
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -19,7 +20,8 @@ class FilmControllerTest {
 
     @BeforeEach
     void setUp() {
-        filmController = new FilmController(new ManageLikeFilmService(new InMemoryFilmStorage(new HashMap<>())));
+        filmController = new FilmController(new ManageLikeFilmService(new InMemoryFilmStorage(new HashMap<>()),
+                new InMemoryUserStorage(new HashMap<>())));
     }
 
     @Test
