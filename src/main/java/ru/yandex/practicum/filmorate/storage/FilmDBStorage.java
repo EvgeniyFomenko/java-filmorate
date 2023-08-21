@@ -139,11 +139,9 @@ public class FilmDBStorage implements StorageFilm {
         TreeSet<Genre> filmGenre = new TreeSet<>();
         TreeSet<Integer> likes = new TreeSet<>();
 
-        Film film = new Film(rs.getInt("film_id"), rs.getString("title")
-                , filmGenre,
-                rs.getString("description"), rs.getDate("release_date").toLocalDate()
-                , rs.getInt("duration"), getMpa(rs.getInt("mpa_id"))
-                , likes);
+        Film film = new Film(rs.getInt("film_id"), rs.getString("title"), filmGenre,
+                rs.getString("description"), rs.getDate("release_date").toLocalDate(),
+                rs.getInt("duration"), getMpa(rs.getInt("mpa_id")), likes);
         do {
             if (rs.getInt("genre_id") != 0) {
                 filmGenre.add(new Genre(rs.getInt("genre_id"), rs.getString("name")));
@@ -197,8 +195,7 @@ public class FilmDBStorage implements StorageFilm {
         String sql = "SELECT * FROM genre WHERE genre_id = ?";
 
         return jdbcTemplate.queryForObject(sql,
-                (rs, rowNum) -> new Genre(rs.getInt("genre_id"), rs.getString("name")),
-                id);
+                (rs, rowNum) -> new Genre(rs.getInt("genre_id"), rs.getString("name")), id);
     }
 
     @Override
@@ -214,15 +211,14 @@ public class FilmDBStorage implements StorageFilm {
         String sql = "SELECT * FROM MPA WHERE mpa_id = ?";
 
         return jdbcTemplate.queryForObject(sql,
-                (rs, rowNum) -> new Mpa(rs.getInt("mpa_id"), rs.getString("name")),
-                id);
+                (rs, rowNum) -> new Mpa(rs.getInt("mpa_id"), rs.getString("name")), id);
     }
 
     @Override
     public List<? extends Model> getMpaList() {
         String sql = "SELECT * FROM  MPA";
 
-        return jdbcTemplate.query(sql, (rs, rowNum) -> new Mpa(rs.getInt("mpa_id")
-                , rs.getString("name")));
+        return jdbcTemplate.query(sql, (rs, rowNum) -> new Mpa(rs.getInt("mpa_id"),
+                rs.getString("name")));
     }
 }

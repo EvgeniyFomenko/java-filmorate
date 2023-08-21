@@ -90,7 +90,8 @@ public class UserDBStorage implements StorageUser {
     @Override
     public Map<Integer, User> getModelMap() {
         String sql = "SELECT * FROM users";
-        return jdbcTemplate.query(sql, this::rowMapperUser).stream().collect(Collectors.toMap(User::getId, Function.identity()));
+        return jdbcTemplate.query(sql, this::rowMapperUser).stream().collect(Collectors.toMap(User::getId,
+                Function.identity()));
     }
 
     @Override
