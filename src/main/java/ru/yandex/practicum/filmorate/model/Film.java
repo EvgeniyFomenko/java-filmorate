@@ -27,8 +27,7 @@ public class Film extends Model {
         this.duration = duration;
     }
 
-    public Film(int id, String name, String description, LocalDate releaseDate, int duration
-            , Mpa mpa) {
+    public Film(int id, String name, String description, LocalDate releaseDate, int duration, Mpa mpa) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -37,8 +36,8 @@ public class Film extends Model {
         this.mpa = mpa;
     }
 
-    public Film(int id, String name, TreeSet<Genre> genres, String description, LocalDate releaseDate, int duration
-            , Mpa mpa, TreeSet<Integer> likes) {
+    public Film(int id, String name, TreeSet<Genre> genres, String description, LocalDate releaseDate, int duration,
+                Mpa mpa, TreeSet<Integer> likes) {
         this.id = id;
         this.name = name;
         this.genres = genres;
