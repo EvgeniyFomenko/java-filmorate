@@ -47,9 +47,9 @@ public class ManageFriendsUserService extends UserService {
                                 return null;
                             }
                             return model;
-                }).
-                collect(Collectors.toList()).stream().map(e -> (User) e).
-                collect(Collectors.toList());
+                })
+                .collect(Collectors.toList()).stream().map(e -> (User) e)
+                .collect(Collectors.toList());
     }
 
     public List<User> getFriends(int id) throws NotFoundException {
