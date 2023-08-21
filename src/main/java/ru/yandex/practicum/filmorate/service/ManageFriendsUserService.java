@@ -39,8 +39,7 @@ public class ManageFriendsUserService extends UserService {
         List<Integer> idFriends = user1.getFriends().stream().filter(e -> user2.getFriends().stream()
                 .anyMatch(e1 -> Objects.equals(e, e1))).collect(Collectors.toList());
 
-        return idFriends.stream().map(e ->
-                        {
+        return idFriends.stream().map(e -> {
                             Model model;
                             try {
                                 model = getModelById(e);
@@ -48,9 +47,9 @@ public class ManageFriendsUserService extends UserService {
                                 return null;
                             }
                             return model;
-                        }
-                ).collect(Collectors.toList()).stream().map(e -> (User) e)
-                .collect(Collectors.toList());
+                }).
+                collect(Collectors.toList()).stream().map(e -> (User) e).
+                collect(Collectors.toList());
     }
 
     public List<User> getFriends(int id) throws NotFoundException {
