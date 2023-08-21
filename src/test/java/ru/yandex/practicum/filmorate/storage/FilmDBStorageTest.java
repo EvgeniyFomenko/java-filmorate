@@ -27,11 +27,12 @@ class FilmDBStorageTest {
     private final UserDBStorage userDBStorage;
     TreeSet<Genre> genreTreeSet = new TreeSet<>();
     TreeSet<Integer> likes = new TreeSet<>();
-    User user = new User(0, "user", "user@mail.ru", "userLogin", LocalDate.of(1993, 2, 12));
-    Film film = new Film(0, "name", genreTreeSet, "description", LocalDate.of(2021, 3, 23)
-            , 45, new Mpa(1), likes);
-    Film film2 = new Film(0, "name2", genreTreeSet, "description2", LocalDate.of(2021, 3, 23)
-            , 45, new Mpa(1), likes);
+    User user = new User(0, "user", "user@mail.ru", "userLogin",
+            LocalDate.of(1993, 2, 12));
+    Film film = new Film(0, "name", genreTreeSet, "description",
+            LocalDate.of(2021, 3, 23), 45, new Mpa(1), likes);
+    Film film2 = new Film(0, "name2", genreTreeSet, "description2",
+            LocalDate.of(2021, 3, 23), 45, new Mpa(1), likes);
 
     @Test
     public void save() {
