@@ -48,28 +48,21 @@ public class InMemoryUserStorage implements StorageUser {
         User user1 = userMap.get(user.getFrom());
         User user2 = userMap.get(user.getTo());
         List<Integer> userFr1 = user1.getFriends();
-
-        userFr1.remove(user2.getId());
-        user1.setFriends(userFr1);
-
         List<Integer> userFr2 = user2.getFriends();
 
+        userFr1.remove(user2.getId());
         userFr2.remove(user1.getId());
-        user1.setFriends(userFr1);
+
     }
 
     public User addToSet(FromTo user) {
         User user1 = userMap.get(user.getFrom());
         User user2 = userMap.get(user.getTo());
         List<Integer> userFr1 = user1.getFriends();
-
-        userFr1.add(user2.getId());
-        user1.setFriends(userFr1);
-
         List<Integer> userFr2 = user2.getFriends();
 
+        userFr1.add(user2.getId());
         userFr2.add(user1.getId());
-        user1.setFriends(userFr1);
 
         return user1;
     }

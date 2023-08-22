@@ -6,12 +6,9 @@ import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.FilmLikes;
-import ru.yandex.practicum.filmorate.model.Model;
 import ru.yandex.practicum.filmorate.storage.StorageFilm;
 import ru.yandex.practicum.filmorate.storage.StorageUser;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -35,25 +32,20 @@ public class ManageLikeFilmService extends FilmService {
 
         storage.removeIdFromIdSet(filmLikes);
 
-        Film film = super.getModelById(filmLikes.getFrom());
+        Film film = (Film) getModelById(filmLikes.getFrom());
 
         return film;
     }
 
     public Set<Integer> getLikes(Integer idFilm) throws NotFoundException {
-        Film film = super.getModelById(idFilm);
+        Film film = (Film) getModelById(idFilm);
         Set<Integer> likes = film.getLikes();
 
         return likes;
     }
 
     public List<Film> getFilmsPopular(int count) {
-        Collection<? super Model> collection = super.getModelList();
-        List<Film> filmList = new ArrayList<>();
-        for (Object fm :
-                collection) {
-            filmList.add((Film) fm);
-        }
+        List<Film> filmList = super.getModelList();
 
         return filmList.stream().sorted((e1, e2) -> e2.getLikes().size() - e1.getLikes().size())
                 .limit(count).collect(Collectors.toList());

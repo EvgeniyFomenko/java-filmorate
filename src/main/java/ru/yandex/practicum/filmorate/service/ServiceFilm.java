@@ -2,6 +2,7 @@ package ru.yandex.practicum.filmorate.service;
 
 import org.springframework.dao.EmptyResultDataAccessException;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
+import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.Model;
 import ru.yandex.practicum.filmorate.model.Mpa;
@@ -9,7 +10,7 @@ import ru.yandex.practicum.filmorate.storage.StorageFilm;
 
 import java.util.List;
 
-public abstract class ServiceFilm extends Service {
+public abstract class ServiceFilm extends Service<Film> {
     private static StorageFilm storageFilm;
 
     public ServiceFilm(StorageFilm storage) {

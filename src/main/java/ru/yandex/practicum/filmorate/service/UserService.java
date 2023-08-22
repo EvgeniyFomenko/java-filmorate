@@ -3,7 +3,6 @@ package ru.yandex.practicum.filmorate.service;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.ValidateException;
-import ru.yandex.practicum.filmorate.model.Model;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.StorageUser;
 
@@ -21,8 +20,8 @@ public class UserService extends ServiceUser {
     }
 
     @Override
-    protected void validate(Model model) throws ValidateException {
-        User user = (User) model;
+    protected void validate(User user) throws ValidateException {
+
 
         if (user.getLogin().contains(" ")) {
             throw new ValidateException(USER_LOGIN_EXCEPTION);

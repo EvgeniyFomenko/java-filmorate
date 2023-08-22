@@ -22,13 +22,12 @@ class UserServiceTest {
 
     @Test
     void addUser() throws ValidateException {
-        User user = new User();
-        user.setEmail("");
-        user.setLogin("login1");
-        user.setBirthday(LocalDate.of(1994, 6, 12));
+        User user = User.builder()
+                .email("my@email.ru")
+                .login("vasya pupkin")
+                .birthday(LocalDate.of(1994, 6, 12))
+                .build();
 
-        user.setEmail("my@email.ru");
-        user.setLogin("vasya pupkin");
         assertThrows(ValidateException.class, () -> userService.addModel(user));
         user.setLogin("vasyaPupkin");
         userService.addModel(user);

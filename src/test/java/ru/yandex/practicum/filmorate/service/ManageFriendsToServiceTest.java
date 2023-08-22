@@ -19,24 +19,26 @@ public class ManageFriendsToServiceTest {
 
     @Test
     public void addFriend() throws ValidateException, NotFoundException {
-        User user = new User();
-        user.setBirthday(LocalDate.of(1994, 6, 12));
-        user.setEmail("my@email.ru");
-        user.setLogin("vasyaPupkin");
-        user.setFriends(new ArrayList<>());
+        User user = User.builder()
+                .birthday(LocalDate.of(1994, 6, 12))
+                .email("my@email.ru")
+                .login("vasyaPupkin")
+                .friends(new ArrayList<>())
+                .build();
 
+        User user1 = User.builder()
+                .birthday(LocalDate.of(1994, 6, 12))
+                .email("123my@email.ru")
+                .login("vasislisaPupkina")
+                .friends(new ArrayList<>())
+                .build();
 
-        User user1 = new User();
-        user1.setBirthday(LocalDate.of(1994, 7, 12));
-        user1.setEmail("123my@email.ru");
-        user1.setLogin("vasislisaPupkina");
-        user1.setFriends(new ArrayList<>());
-
-        User user3 = new User();
-        user3.setBirthday(LocalDate.of(1994, 7, 12));
-        user3.setEmail("123@email.ru");
-        user3.setLogin("vasisPupkin");
-        user3.setFriends(new ArrayList<>());
+        User user3 = User.builder()
+                .birthday(LocalDate.of(1994, 6, 12))
+                .email("123@email.ru")
+                .login("vasisPupkin")
+                .friends(new ArrayList<>())
+                .build();
 
         manageFriendsUserService.addToFriends(new FriendsTo(userService.addModel(user3).getId(), userService.addModel(user).getId()));
         manageFriendsUserService.addToFriends(new FriendsTo(userService.addModel(user1).getId(), user3.getId()));

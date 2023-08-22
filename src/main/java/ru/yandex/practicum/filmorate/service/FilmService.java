@@ -4,11 +4,11 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.ValidateException;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.model.Model;
 import ru.yandex.practicum.filmorate.storage.StorageFilm;
 
 import java.time.LocalDate;
 import java.util.Objects;
+import java.util.TreeSet;
 
 @Service
 public class FilmService extends ServiceFilm {
@@ -25,8 +25,15 @@ public class FilmService extends ServiceFilm {
         super(storage);
     }
 
-    protected void validate(Model model) throws ValidateException {
-        Film film = (Film) model;
+    protected void validate(Film film) throws ValidateException {
+        if (Objects.isNull(film.getGenres())) {
+            film.setGenres(new TreeSet<>());
+        }
+
+        if (Objects.isNull(film.getLikes())) {
+            film.setLikes(new TreeSet<>());
+        }
+
         if (Objects.isNull(film.getName()) || film.getName().isBlank() || film.getName().isEmpty()) {
             throw new ValidateException(FILM_NAME_BLANK_EXCEPTION);
         }

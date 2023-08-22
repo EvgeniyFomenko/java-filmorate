@@ -12,7 +12,7 @@ import javax.validation.Valid;
 
 @Slf4j
 @RequestMapping("/users")
-public class UserController extends Controller {
+public class UserController extends Controller<User> {
 
     private static final String SERVICE = "UserService";
 

@@ -13,12 +13,10 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 @Repository("userDBStorage")
 @AllArgsConstructor
@@ -38,7 +36,7 @@ public class UserDBStorage implements StorageUser {
     }
 
     @Override
-    public Model save(Model model) {
+    public User save(Model model) {
         User user = (User) model;
         String sql = ("INSERT INTO users (name, birth_date, email, login) VALUES (?,?,?,?)");
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -57,27 +55,35 @@ public class UserDBStorage implements StorageUser {
 
     @Override
     public User get(int id) {
-        String sql = "SELECT * FROM users WHERE user_id = ?";
-        User user = jdbcTemplate.queryForObject(sql, this::rowMapperUser, id);
-        if (Objects.isNull(user)) {
-            return null;
-        }
-        String sqlGetLikes = "SELECT user2_id FROM friend  WHERE user_id = ?";
-        List<Integer> likes = new LinkedList<>(jdbcTemplate.query(sqlGetLikes, this::mapRowToInteger, id));
+        String sqlUserLikes = "SELECT u.user_id, u.name, u.email, u.login, u.birth_date, fr.friend_id\n" +
+                "FROM users as u\n" +
+                "LEFT JOIN friend as fr ON fr.user_id = u.user_id\n" +
+                "WHERE u.user_id = ?\n";
+        ;
+        User user = jdbcTemplate.queryForObject(sqlUserLikes, this::rowMapperUser, id);
 
-        user.setFriends(likes);
         return user;
 
     }
 
     private Integer mapRowToInteger(ResultSet rs, int rowNum) throws SQLException {
-        return rs.getInt("user2_id");
+        return rs.getInt("friend_id");
     }
 
     private User rowMapperUser(ResultSet rs, int idRow) throws SQLException {
-        return new User(rs.getInt("user_id"), rs.getString("name"),
-                rs.getString("email"), rs.getString("login"),
-                rs.getDate("birth_date").toLocalDate());
+        List<Integer> likes = new ArrayList<>();
+        User user = User.builder().id(rs.getInt("user_id"))
+                .name(rs.getString("name"))
+                .email(rs.getString("email"))
+                .login(rs.getString("login"))
+                .birthday(rs.getDate("birth_date").toLocalDate())
+                .friends(likes).build();
+        do {
+            if (rs.getInt("friend_id") != 0) {
+                likes.add(rs.getInt("friend_id"));
+            }
+        } while (rs.next());
+        return user;
     }
 
     @Override
@@ -89,20 +95,26 @@ public class UserDBStorage implements StorageUser {
 
     @Override
     public Map<Integer, User> getModelMap() {
-        String sql = "SELECT * FROM users";
-        return jdbcTemplate.query(sql, this::rowMapperUser).stream().collect(Collectors.toMap(User::getId,
-                Function.identity()));
+        String sql = "SELECT user_id FROM users";
+        Map<Integer, User> mapUsers = new HashMap<>();
+        List<Integer> usersIdList = jdbcTemplate.query(sql, (rs, r) -> rs.getInt("user_id"));
+
+        for (int id : usersIdList) {
+            mapUsers.put(id, get(id));
+        }
+
+        return mapUsers;
     }
 
     @Override
     public void removeIdFromIdSet(FromTo user) {
-        String sql = "DELETE FROM friend WHERE user_id = ? AND user2_id = ?";
+        String sql = "DELETE FROM friend WHERE user_id = ? AND friend_id = ?";
         jdbcTemplate.update(sql, user.getFrom(), user.getTo());
     }
 
     @Override
-    public <T extends Model> T addToSet(FromTo userFriend) {
-        String sql = "INSERT INTO  friend (user_id, user2_id, IS_APPROVED) VALUES (?,?,?);";
+    public Model addToSet(FromTo userFriend) {
+        String sql = "INSERT INTO  friend (user_id, friend_id, IS_APPROVED) VALUES (?,?,?);";
         jdbcTemplate.update(sql, userFriend.getFrom(), userFriend.getTo(), true);
         return null;
     }

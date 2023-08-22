@@ -5,18 +5,15 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
-import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.model.Genre;
-import ru.yandex.practicum.filmorate.model.Mpa;
-import ru.yandex.practicum.filmorate.model.User;
+import org.springframework.dao.EmptyResultDataAccessException;
+import ru.yandex.practicum.filmorate.model.*;
 
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.Objects;
 import java.util.TreeSet;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @AutoConfigureTestDatabase
@@ -27,27 +24,33 @@ class FilmDBStorageTest {
     private final UserDBStorage userDBStorage;
     TreeSet<Genre> genreTreeSet = new TreeSet<>();
     TreeSet<Integer> likes = new TreeSet<>();
-    User user = new User(0, "user", "user@mail.ru", "userLogin",
-            LocalDate.of(1993, 2, 12));
-    Film film = new Film(0, "name", genreTreeSet, "description",
-            LocalDate.of(2021, 3, 23), 45, new Mpa(1), likes);
-    Film film2 = new Film(0, "name2", genreTreeSet, "description2",
-            LocalDate.of(2021, 3, 23), 45, new Mpa(1), likes);
+
+    User user = User.builder().name("user").email("user@mail.ru").login("userLogin").birthday(LocalDate.of(1993, 2, 12)).build();
+    Film film = Film.builder().name("name").genres(genreTreeSet).description("description")
+            .releaseDate(LocalDate.of(2021, 3, 23)).duration(45).mpa(new Mpa(1))
+            .likes(likes).build();
+    Film film2 = Film.builder().name("name2").genres(genreTreeSet).description("description2")
+            .releaseDate(LocalDate.of(2021, 3, 23)).duration(45).mpa(new Mpa(1))
+            .likes(likes).build();
+
 
     @Test
     public void save() {
-        userDBStorage.save(user);
-
         Collections.addAll(genreTreeSet, new Genre(1, null), new Genre(3, null));
-
-        Collections.addAll(likes, 1);
-
+        Collections.addAll(likes, 2);
+        userDBStorage.save(user);
         storageFilm.save(film);
         storageFilm.save(film2);
+
         Film filmGet = storageFilm.get(1);
 
         assertEquals(1, filmGet.getId());
         assertEquals(2, storageFilm.get(2).getId());
+        storageFilm.delete(1);
+        assertThrows(EmptyResultDataAccessException.class, () -> storageFilm.get(1));
+        assertTrue(storageFilm.get(2).getLikes().stream().anyMatch(e -> Objects.equals(e, 2)));
+        storageFilm.removeIdFromIdSet(new FilmLikes(2, 2));
+        assertEquals(0, storageFilm.get(2).getLikes().size());
 
     }
 
@@ -55,8 +58,9 @@ class FilmDBStorageTest {
     public void update() {
         storageFilm.save(film);
 
-        Film updateWithName = new Film(1, "nameUpdate", genreTreeSet, "descriptionUpdate",
-                LocalDate.of(2021, 3, 23), 45, new Mpa(1), likes);
+        Film updateWithName = Film.builder().name("nameUpdate").genres(genreTreeSet).description("descriptionUpdate")
+                .releaseDate(LocalDate.of(2021, 3, 23)).duration(45).mpa(new Mpa(1))
+                .likes(likes).id(1).build();
 
         storageFilm.update(updateWithName);
 
@@ -66,10 +70,16 @@ class FilmDBStorageTest {
 
         Collections.addAll(genreTreeSet, new Genre(2, null));
 
-        Film updateWithGenre = new Film(1, "nameUpdate", genreTreeSet, "descriptionUpdate",
-                LocalDate.of(2021, 3, 23), 45, new Mpa(1), likes);
-        storageFilm.update(updateWithGenre);
+        storageFilm.update(updateWithName);
         assertTrue(storageFilm.get(1).getGenres().stream().anyMatch(e -> Objects.equals(e.getId(), 2)));
     }
 
+    @Test
+    void getMpaGenres() {
+        assertEquals(1, storageFilm.getMpa(1).getId());
+        assertEquals(5, storageFilm.getMpaList().size());
+        assertEquals(1, storageFilm.getGenreById(1).getId());
+        assertEquals(6, storageFilm.getGenreList().size());
+
+    }
 }

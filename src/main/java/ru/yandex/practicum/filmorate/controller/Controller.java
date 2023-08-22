@@ -10,28 +10,28 @@ import ru.yandex.practicum.filmorate.service.Service;
 import java.util.List;
 
 @RequiredArgsConstructor
-public abstract class Controller {
+public abstract class Controller<T extends Model> {
 
-    protected final Service service;
+    protected final Service<T> service;
 
 
-    public <T extends Model> T add(T model) throws ValidateException {
+    public T add(T model) throws ValidateException {
 
         return service.addModel(model);
     }
 
 
-    public <T extends Model> T update(T model) throws NotFoundException {
+    public T update(T model) throws NotFoundException {
         service.updateModel(model);
         return model;
     }
 
     @GetMapping
-    public List<? super Model> getModelList() {
+    public List<T> getModelList() {
         return service.getModelList();
     }
 
-    public <T extends Model> T get(int id) throws NotFoundException {
+    public T get(int id) throws NotFoundException {
         T model = service.getModelById(id);
 
         return model;

@@ -11,10 +11,10 @@ import javax.validation.Valid;
 
 @Slf4j
 @RequestMapping("/films")
-public class FilmController extends Controller {
+public class FilmController extends Controller<Film> {
 
 
-    public FilmController(Service service) {
+    public FilmController(Service<Film> service) {
         super(service);
     }
 

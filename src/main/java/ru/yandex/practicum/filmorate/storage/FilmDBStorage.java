@@ -139,14 +139,24 @@ public class FilmDBStorage implements StorageFilm {
         TreeSet<Genre> filmGenre = new TreeSet<>();
         TreeSet<Integer> likes = new TreeSet<>();
 
-        Film film = new Film(rs.getInt("film_id"), rs.getString("title"), filmGenre,
-                rs.getString("description"), rs.getDate("release_date").toLocalDate(),
-                rs.getInt("duration"), getMpa(rs.getInt("mpa_id")), likes);
+        Film film = Film.builder().id(rs.getInt("film_id"))
+                .name(rs.getString("title"))
+                .description(rs.getString("description"))
+                .genres(filmGenre)
+                .duration(rs.getInt("duration"))
+                .releaseDate(rs.getDate("release_date").toLocalDate())
+                .mpa(getMpa(rs.getInt("mpa_id")))
+                .likes(likes).build();
+
         do {
             if (rs.getInt("genre_id") != 0) {
                 filmGenre.add(new Genre(rs.getInt("genre_id"), rs.getString("name")));
+            }
+
+            if (rs.getInt("user_id") != 0) {
                 likes.add(rs.getInt("user_id"));
             }
+
         } while (rs.next());
 
         return film;
@@ -155,7 +165,7 @@ public class FilmDBStorage implements StorageFilm {
 
     @Override
     public void delete(int id) {
-        String sql = "DELETE * FROM film WHERE user_id = ?";
+        String sql = "DELETE FROM film WHERE film_id = ?";
 
         jdbcTemplate.update(sql, id);
     }

@@ -23,10 +23,10 @@ class UserControllerTest {
 
     @Test
     void add() throws ValidateException, NotFoundException {
-        User user = new User();
-        user.setEmail("my@email.ru");
-        user.setLogin("login1");
-        user.setBirthday(LocalDate.of(1994, 6, 12));
+        User user = User.builder()
+                .email("my@email.ru")
+                .login("login1")
+                .birthday(LocalDate.of(1994, 6, 12)).build();
 
         User user1 = userController.add(user);
         assertEquals(1, userController.getModelList().size());
