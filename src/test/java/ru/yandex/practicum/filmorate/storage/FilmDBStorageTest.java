@@ -37,7 +37,7 @@ class FilmDBStorageTest {
     @Test
     public void save() {
         Collections.addAll(genreTreeSet, new Genre(1, null), new Genre(3, null));
-        Collections.addAll(likes, 2);
+        Collections.addAll(likes, 1);
         userDBStorage.save(user);
         storageFilm.save(film);
         storageFilm.save(film2);
@@ -48,9 +48,9 @@ class FilmDBStorageTest {
         assertEquals(2, storageFilm.get(2).getId());
         storageFilm.delete(1);
         assertThrows(EmptyResultDataAccessException.class, () -> storageFilm.get(1));
-        assertTrue(storageFilm.get(2).getLikes().stream().anyMatch(e -> Objects.equals(e, 2)));
-        storageFilm.removeIdFromIdSet(new FilmLikes(2, 2));
-        assertEquals(0, storageFilm.get(2).getLikes().size());
+        assertTrue(storageFilm.get(2).getLikes().stream().anyMatch(e -> Objects.equals(e, 1)));
+        storageFilm.removeIdFromIdSet(new FilmLikes(2, 1));
+        assertEquals(0, storageFilm.get(1).getLikes().size());
 
     }
 
