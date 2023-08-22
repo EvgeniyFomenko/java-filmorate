@@ -50,7 +50,7 @@ class FilmDBStorageTest {
         assertThrows(EmptyResultDataAccessException.class, () -> storageFilm.get(1));
         assertTrue(storageFilm.get(2).getLikes().stream().anyMatch(e -> Objects.equals(e, 1)));
         storageFilm.removeIdFromIdSet(new FilmLikes(2, 1));
-        assertEquals(0, storageFilm.get(1).getLikes().size());
+        assertEquals(0, storageFilm.get(2).getLikes().size());
 
     }
 
