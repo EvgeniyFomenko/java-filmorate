@@ -4,8 +4,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.FriendsTo;
+import ru.yandex.practicum.filmorate.model.Model;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.storage.Storage;
+import ru.yandex.practicum.filmorate.storage.StorageUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +18,7 @@ import java.util.stream.Collectors;
 public class ManageFriendsUserService extends UserService {
     protected static final String NEGATIVE_ID_EXCEPTION = "Id пользователя не может быть меньше нуля";
 
-    public ManageFriendsUserService(@Qualifier(UserService.USER_STORAGE) Storage storage) {
+    public ManageFriendsUserService(@Qualifier(UserService.USER_STORAGE) StorageUser storage) {
         super(storage);
     }
 
@@ -32,20 +33,30 @@ public class ManageFriendsUserService extends UserService {
         storage.removeIdFromIdSet(user);
     }
 
-    public List<User> getCommonFriends(FriendsTo user) {
+    public List<User> getCommonFriends(FriendsTo user) throws NotFoundException {
         User user1 = super.getModelById(user.getFrom());
         User user2 = super.getModelById(user.getTo());
-        List<Integer> idFriends = user1.getIdSet().stream().filter(e -> user2.getIdSet().stream()
+        List<Integer> idFriends = user1.getFriends().stream().filter(e -> user2.getFriends().stream()
                 .anyMatch(e1 -> Objects.equals(e, e1))).collect(Collectors.toList());
-        return idFriends.stream().map(super::getModelById).collect(Collectors.toList()).stream().map(e -> (User) e)
+
+        return idFriends.stream().map(e -> {
+                            Model model;
+                            try {
+                                model = getModelById(e);
+                            } catch (NotFoundException exception) {
+                                return null;
+                            }
+                            return model;
+                })
+                .collect(Collectors.toList()).stream().map(e -> (User) e)
                 .collect(Collectors.toList());
     }
 
-    public List<User> getFriends(int id) {
+    public List<User> getFriends(int id) throws NotFoundException {
         User user = super.getModelById(id);
         List<User> userList = new ArrayList<>();
 
-        for (int idUser : user.getIdSet()) {
+        for (int idUser : user.getFriends()) {
             userList.add(super.getModelById(idUser));
         }
 

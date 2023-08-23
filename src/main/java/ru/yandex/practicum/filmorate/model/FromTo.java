@@ -8,4 +8,5 @@ import lombok.Data;
 public abstract class FromTo {
     protected Integer from;
     protected Integer to;
+
 }

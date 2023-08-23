@@ -6,12 +6,13 @@ import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.FromTo;
 import ru.yandex.practicum.filmorate.model.Model;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 @Component("inMemoryFilmStorage")
 @RequiredArgsConstructor
-public class InMemoryFilmStorage implements Storage {
+public class InMemoryFilmStorage implements StorageFilm {
     protected final Map<Integer, Film> filmMap;
     private Integer id = 0;
 
@@ -38,28 +39,40 @@ public class InMemoryFilmStorage implements Storage {
         filmMap.remove(id);
     }
 
-    public Map<Integer, ?> getModelMap() {
+    public Map<Integer, Film> getModelMap() {
         return filmMap;
     }
 
     public void removeIdFromIdSet(FromTo films) {
-        Model model1 = filmMap.get(films.getFrom());
-        Model model2 = filmMap.get(films.getTo());
-        Set<Integer> userFr1 = model1.getIdSet();
-        userFr1.remove(model2.getId());
-        model1.setIdSet(userFr1);
-        Set<Integer> userFr2 = model2.getIdSet();
-        userFr2.remove(model1.getId());
-        model1.setIdSet(userFr1);
     }
 
     @Override
-    public <T extends Model> T addToSet(FromTo filmLikes) {
+    public <T extends Model> T getGenreById(int id) {
+        return null;
+    }
+
+    @Override
+    public List<? extends Model> getGenreList() {
+        return null;
+    }
+
+    @Override
+    public <T extends Model> T getMpa(int id) {
+        return null;
+    }
+
+    @Override
+    public List<? extends Model> getMpaList() {
+        return null;
+    }
+
+    @Override
+    public Film addToSet(FromTo filmLikes) {
         Film film = filmMap.get(filmLikes.getFrom());
-        Set<Integer> likes = film.getIdSet();
+        Set<Integer> likes = film.getLikes();
 
         likes.add(filmLikes.getTo());
-        return (T) film;
+        return film;
     }
 
 }

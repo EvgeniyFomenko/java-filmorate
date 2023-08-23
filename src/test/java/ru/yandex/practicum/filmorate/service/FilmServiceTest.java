@@ -21,10 +21,10 @@ class FilmServiceTest {
 
     @Test
     void addFilm() {
-        Film film = new Film();
-        film.setDescription("description");
-        film.setDuration(60);
-        film.setReleaseDate(LocalDate.of(2022, 02, 23));
+        Film film = Film.builder().description("description")
+                .duration(60)
+                .releaseDate(LocalDate.of(2022, 02, 23))
+                .build();
 
         assertThrows(ValidateException.class, () -> filmService.addModel(film));
         film.setName(" ");

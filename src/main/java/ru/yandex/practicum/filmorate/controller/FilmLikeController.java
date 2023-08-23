@@ -6,16 +6,16 @@ import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.FilmLikes;
 import ru.yandex.practicum.filmorate.service.ManageLikeFilmService;
-import ru.yandex.practicum.filmorate.service.Service;
+import ru.yandex.practicum.filmorate.service.ServiceFilm;
 
 import java.util.List;
 
 @RestController
 public class FilmLikeController extends FilmController {
-    private static final String USE_SERVICE = "ManageLikeFilmService";
+    protected static final String USE_SERVICE = "ManageLikeFilmService";
     private final ManageLikeFilmService manageLikeFilmService;
 
-    public FilmLikeController(@Qualifier(USE_SERVICE) Service filmService) {
+    public FilmLikeController(@Qualifier(USE_SERVICE) ServiceFilm filmService) {
         super(filmService);
         manageLikeFilmService = (ManageLikeFilmService) filmService;
     }

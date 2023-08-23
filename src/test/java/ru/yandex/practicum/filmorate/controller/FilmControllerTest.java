@@ -7,6 +7,7 @@ import ru.yandex.practicum.filmorate.exception.ValidateException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.ManageLikeFilmService;
 import ru.yandex.practicum.filmorate.storage.InMemoryFilmStorage;
+import ru.yandex.practicum.filmorate.storage.InMemoryUserStorage;
 
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -19,15 +20,16 @@ class FilmControllerTest {
 
     @BeforeEach
     void setUp() {
-        filmController = new FilmController(new ManageLikeFilmService(new InMemoryFilmStorage(new HashMap<>())));
+        filmController = new FilmController(new ManageLikeFilmService(new InMemoryFilmStorage(new HashMap<>()),
+                new InMemoryUserStorage(new HashMap<>())));
     }
 
     @Test
     void add() throws ValidateException, NotFoundException {
-        Film film = new Film();
-        film.setDescription("description");
-        film.setDuration(60);
-        film.setReleaseDate(LocalDate.of(2022, 02, 23));
+        Film film = Film.builder()
+                .description("description")
+                .duration(60)
+                .releaseDate(LocalDate.of(2022, 02, 23)).build();
 
         assertThrows(ValidateException.class, () -> filmController.add(film));
         film.setName("film1");

@@ -11,10 +11,11 @@ import javax.validation.Valid;
 
 @Slf4j
 @RequestMapping("/films")
-public class FilmController extends Controller {
+public class FilmController extends Controller<Film> {
 
-    public FilmController(Service filmService) {
-        super(filmService);
+
+    public FilmController(Service<Film> service) {
+        super(service);
     }
 
     @PostMapping
@@ -31,6 +32,5 @@ public class FilmController extends Controller {
     public Film get(@PathVariable int id) throws NotFoundException {
         return super.get(id);
     }
-
 
 }

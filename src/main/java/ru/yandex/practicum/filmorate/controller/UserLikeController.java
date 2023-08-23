@@ -6,7 +6,7 @@ import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.FriendsTo;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.ManageFriendsUserService;
-import ru.yandex.practicum.filmorate.service.Service;
+import ru.yandex.practicum.filmorate.service.UserService;
 
 import java.util.List;
 
@@ -16,7 +16,7 @@ public class UserLikeController extends UserController {
     private static final String SERVICE = "ManageFriendsUserService";
     private final ManageFriendsUserService manageFriendsUserService;
 
-    public UserLikeController(@Qualifier(SERVICE) Service filmService) {
+    public UserLikeController(@Qualifier(SERVICE) UserService filmService) {
         super(filmService);
         manageFriendsUserService = (ManageFriendsUserService) filmService;
     }
@@ -32,12 +32,12 @@ public class UserLikeController extends UserController {
     }
 
     @GetMapping("/{idUser}/friends")
-    public List<User> getFriend(@PathVariable Integer idUser) {
+    public List<User> getFriend(@PathVariable Integer idUser) throws NotFoundException {
         return manageFriendsUserService.getFriends(idUser);
     }
 
     @GetMapping("/{idUser}/friends/common/{idFriend}")
-    public List<User> getCommonFriend(@PathVariable int idUser, @PathVariable int idFriend) {
+    public List<User> getCommonFriend(@PathVariable int idUser, @PathVariable int idFriend) throws NotFoundException {
         return manageFriendsUserService.getCommonFriends(new FriendsTo(idUser, idFriend));
     }
 
